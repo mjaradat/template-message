@@ -1,6 +1,7 @@
 /* global */
 :root {
   --tm-purple: #e4e5ef;
+  --tm-purple-solid: #9b7cb7;
   --tm-blue: #edf2f7;
   --tm-base: #f8f9fa;
 }
@@ -11,6 +12,9 @@ body {
 
 .tm-purple {
   background-color: var(--tm-purple) !important;
+}
+.tm-purple-solid {
+  background-color: var(--tm-purple-solid) !important;
 }
 
 .tm-blue {
@@ -130,6 +134,7 @@ body {
 .footer .time {
   color: rgba(0, 0, 0, 0.45);
   display: inline-block;
+  flex-shrink: 0;
 }
 
 /* Base frame */
@@ -263,4 +268,12 @@ body {
   border-color: transparent transparent transparent #fff;
   top: 0;
   right: -10px;
+}
+
+[dir='rtl'] .d-rtl-none {
+  display: none !important;
+}
+
+[dir='ltr'] .d-ltr-none {
+  display: none !important;
 }

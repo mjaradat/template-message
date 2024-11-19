@@ -5,9 +5,7 @@
     <div class="preview-screen">
       <div class="preview-header">
         <div class="preview-header-content d-flex align-items-center m-4">
-          <div class="content-icon text-white">
-            <i class="bi bi-shop fs-6"></i>
-          </div>
+          <div class="content-icon text-white"><i class="bi bi-shop fs-6"></i></div>
           <hr class="text-white mx-3" />
         </div>
       </div>
@@ -16,32 +14,31 @@
           <div class="overflow-x-hidden p-3">
             <div class="message">
               <div class="p-2">
-                <div class="header mb-3">
-                  <h6>Header</h6>
-                  <div>
-                    <img
-                      class="message-image"
-                      src="https://s3-alpha-sig.figma.com/img/0f78/1ee9/ec9fc8b75504eaa7843f28c2b73113ed?Expires=1732492800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=E3DTaQLzxj739Hhoyq4VOhiPI~tPDSxvQ2NHhdB13Ce1uAdtAIPtsV98cHuujW34ehzS5ypiKmCmrExCfWDSl8~-vClfeoOeKwtPaebF3d5GF4bqRALiH-U~7uRCiyFPxZQa4-JQkcndwCtbgYAlhTvEsC5wp~4uu-7AeFtufnUunysrbSHxvbFSfmTHGtz12Ti8PafpCMriCEjlRlaIzW3UUY1GB0AU4OfUQCti3Aa8IK-QmZHq2-RZ6YvJE3T00y7QZUWEjPAo-4qpwhTv2WT30CAmv2NDpiC2l3qHrI9zaZEljPV6UX7Bs4OgESJwm-5DSfs2dCRgHoWlXIeRhw__"
-                      alt=""
-                    />
-                  </div>
+                <div v-if="headerText || headerImage" class="header mb-3">
+                  <h6 v-if="headerText">{{ headerText }}</h6>
+                  <div v-else><img class="message-image" :src="headerImage" alt="Header Image" /></div>
                 </div>
-                <div class="body mb-3">
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took
-                  a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially
-                  unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus
-                  PageMaker including versions of Lorem Ipsum.
-                </div>
+                <div class="body mb-3">{{ bodyText }}</div>
                 <div class="footer">
-                  <span class="powered">Powered by</span>
-                  <span class="time">7:20 PM</span>
+                  <span class="powered">{{ footerText }}</span> <span class="time">{{ getCurrentTime() }}</span>
                 </div>
               </div>
-              <div class="buttons border-top px-2">
-                <div class="d-flex flex-column justify-content-center text-bolder">
-                  <a href="#" class="text-decoration-none text-primary d-flex align-items-center justify-content-center py-2"> <i class="bi bi-telephone-fill"></i> <span class="mx-2">Call</span> </a>
-                  <a href="#" class="text-decoration-none text-primary d-flex align-items-center justify-content-center py-2 border-top">
-                    <i class="bi bi-box-arrow-up-right"></i> <span class="mx-2">Visit</span>
+              <div v-if="buttonsComponent" class="buttons border-top px-2">
+                <div v-for="(button, idx) in buttonsComponent.buttons" class="d-flex flex-column justify-content-center text-bolder" :key="idx">
+                  <a
+                    v-if="button.type == ButtonTypeEnum.call"
+                    :href="`tel:${button.value.phone_number}`"
+                    class="text-decoration-none text-primary d-flex align-items-center justify-content-center py-2"
+                  >
+                    <i class="bi bi-telephone-fill"></i> <span class="mx-2">{{ button.text }}</span>
+                  </a>
+                  <a
+                    v-else-if="button.type == ButtonTypeEnum.url"
+                    :href="`${button?.value.url}`"
+                    target="_blank"
+                    class="text-decoration-none text-primary d-flex align-items-center justify-content-center py-2 border-top"
+                  >
+                    <i class="bi bi-box-arrow-up-right"></i> <span class="mx-2">{{ button?.text }}</span>
                   </a>
                 </div>
               </div>
@@ -53,5 +50,32 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { computed, toRef } from 'vue'
+import { type ITemplateMessage } from '../models/interface/i-template-message'
+import { MessageComponentTypeEnum } from '../models/enum/MessageComponentTypeEnum'
+import { type IMessageHeader } from '../models/interface/i-header'
+import { type IMessageBody } from '../models/interface/i-body'
+import { type IMessageFooter } from '../models/interface/i-footer'
+import { type IMessageButtons } from '../models/interface/i-buttons'
+import { ButtonTypeEnum } from '../models/enum/ButtonTypeEnum'
+//props
+const props = defineProps<{ message: ITemplateMessage }>()
+const message = toRef(props, 'message') //computed
+const headerComponent = computed(() => message.value?.components?.find(d => d.type == MessageComponentTypeEnum.header) as IMessageHeader)
+const bodyComponent = computed(() => message.value?.components?.find(d => d.type == MessageComponentTypeEnum.body) as IMessageBody)
+const footerComponent = computed(() => message.value?.components?.find(d => d.type == MessageComponentTypeEnum.footer) as IMessageFooter)
+const buttonsComponent = computed(() => message.value?.components?.find(d => d.type == MessageComponentTypeEnum.buttons) as IMessageButtons)
+const headerText = computed(() => headerComponent.value?.value?.text)
+const headerImage = computed(() => headerComponent.value?.value?.url)
+const bodyText = computed(() => bodyComponent.value?.text)
+const footerText = computed(() => footerComponent.value?.text)
+//methods
+const getCurrentTime = (): string => {
+  const now = new Date()
+  let hours = now?.getHours() % 12
+  const minutes = now?.getMinutes()?.toString()?.padStart(2, '0')
+  const period = now?.getHours() >= 12 ? 'PM' : 'AM'
+  return `${hours}:${minutes} ${period}`
+}
+</script>

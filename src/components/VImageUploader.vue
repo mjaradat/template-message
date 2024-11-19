@@ -1,13 +1,13 @@
 <template>
   <div
     class="image-uploader rounded p-3 text-center"
-    :class="{ 'border-primary': isDragging, 'border-danger': validationMessage }"
+    :class="{ 'border-primary': isDragging, 'border-danger': validationMessage || errorMessage }"
     @dragover.prevent="onDragOver"
     @dragleave="onDragLeave"
     @drop="onDrop"
     @click="() => modelValue && triggerFileInput()"
   >
-    <input type="file" accept="image/*" @change="onFileChange" class="form-control d-none" ref="fileInput" />
+    <input ref="fileInput" class="form-control d-none" type="file" accept="image/*" @change="onFileChange" />
     <div v-if="!modelValue" class="d-flex flex-column upload-instructions text-muted" style="cursor: pointer">
       <i class="bi bi-cloud-upload fs-1"></i>
       <h6>Drag and drop an image here, or</h6>
