@@ -117,6 +117,11 @@ watch(selectedCategory, newValue => {
   font-size: 1.2rem; /* Adjust icon size */
 }
 
+[dir='rtl'] .category-icon {
+  margin-right: unset;
+  margin-left: 1rem;
+}
+
 .category-text {
   flex-grow: 1;
 }

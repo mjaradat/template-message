@@ -5,8 +5,8 @@
       <div class="col-12">
         <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb ">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item text-muted">Templates</li>
-            <li class="breadcrumb-item active text-black" aria-current="page">New Template Message</li>
+            <li class="breadcrumb-item text-muted">{{ t('templatesTitle') }}</li>
+            <li class="breadcrumb-item active text-black" aria-current="page">{{ t('newTemplateMessage') }}</li>
           </ol>
         </nav>
       </div>
@@ -14,7 +14,7 @@
     <div class="row">
       <!-- form -->
       <div class="col-9">
-        <template-message-form :model-value="templateMessage" />
+        <template-message-form :model-value="templateMessage" ref="formRef" />
       </div>
       <!-- preview -->
       <div class="col-3">
@@ -24,9 +24,9 @@
     <!-- footer -->
     <div class="row">
       <div class="col-12">
-        <button class="btn text-white tm-purple-solid mx-auto">
+        <button class="btn text-white tm-purple-solid mx-auto" @click="formRef.validate()">
           <i class="bi bi-floppy"></i>
-          Save
+          {{ t('save') }}
         </button>
       </div>
     </div>
@@ -40,8 +40,10 @@ import { MessageHeader } from '../models/class/header'
 import { MessageBody } from '../models/class/body'
 import { MessageFooter } from '../models/class/footer'
 import { MessageButtons } from '../models/class/buttons'
+import { t } from '../i18n/locales'
 
 const templateMessage = ref(new TemplateMessage())
+const formRef = ref()
 templateMessage.value.components.push(new MessageHeader())
 templateMessage.value.components.push(new MessageBody())
 templateMessage.value.components.push(new MessageFooter())

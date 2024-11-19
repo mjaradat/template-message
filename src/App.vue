@@ -3,7 +3,7 @@
     <div class="row bg-white py-3">
       <div class="col-10 d-flex align-items-center">
         <i class="bi bi-plus-lg fs-4 text-black"></i>
-        <h4 class="mx-3">New Template Message</h4>
+        <h4 class="mx-3">{{ t('newTemplateMessage') }}</h4>
       </div>
 
       <div class="col-2 d-flex align-items-center justify-content-end">
@@ -16,16 +16,10 @@
         <div>
           <button class="btn text-white tm-purple-solid mx-auto">
             <i class="bi bi-floppy"></i>
-            Save
+            {{ t('save') }}
           </button>
         </div>
       </div>
-    </div>
-  </div>
-  <div>
-    <div class="container-fluid">
-      <!-- <p>{{ translate('welcome') }}</p>
-      <p>{{ translate('greeting', { name: 'Ahmed' }) }}</p> -->
     </div>
   </div>
   <router-view></router-view>
@@ -34,9 +28,6 @@
 <script lang="ts" setup>
 import { watch } from 'vue'
 import { setLocale, getDir, t } from './i18n/locales'
-
-// Translate function
-const translate = (key: string, params?: Record<string, string | number>) => t(key, params)
 
 // Switch locale function
 const switchLocale = (locale: 'en' | 'ar') => {

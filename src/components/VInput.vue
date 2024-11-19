@@ -14,6 +14,7 @@
       :type="multiline ? undefined : type"
       :rows="multiline ? rows || 3 : undefined"
       :is="multiline ? 'textarea' : 'input'"
+      maxlength="256"
       @input="onInput"
     ></component>
 

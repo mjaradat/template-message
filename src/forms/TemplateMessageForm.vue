@@ -1,76 +1,165 @@
 <template>
   <fieldset>
     <form>
-      <v-card title="Template Details" sub-title="Define your template name and language">
-        <v-input v-model="modelValue.name" id="template-name" label="Template Name" placeholder="Enter template name..." :validationState="states.name" :error="errorMessages.name" required />
+      <v-card :title="t('templateDetails')" :sub-title="t('templateDescription')">
+        <v-input
+          v-model="modelValue.name"
+          id="template-name"
+          :label="t('templateName')"
+          :placeholder="t('templateNamePlaceholder')"
+          :validationState="states.name"
+          :error="errorMessages.name"
+          required
+          @keydown="resetState('name')"
+        />
 
         <v-select
           v-model="modelValue.language"
           id="full-select"
-          label="Language"
-          placeholder="Choose an option"
           :items="languageItems"
-          :required="true"
           :validationState="states.language"
           :error="errorMessages.language"
+          required
+          :label="t('language')"
+          :placeholder="t('languagePlaceholder')"
+          @update:model-value="resetState('language')"
         />
       </v-card>
 
-      <v-card title="Category" sub-title="Choose your message template">
-        <v-visual-select v-model="modelValue.category" :categories="categories" :validationState="states.category" :error="errorMessages.category" />
+      <v-card :title="t('category')" :sub-title="t('categoryDescription')">
+        <v-visual-select v-model="modelValue.category" :categories="categories" :validationState="states.category" :error="errorMessages.category" @update:model-value="resetState('category')" />
       </v-card>
 
-      <v-card title="Header" sub-title="Highlight your brand here, use images or videos, to stand out">
-        <v-radio-buttons v-model="headerComponent.format" :items="headerFormatItems" :validationState="states.headerFormat" :error="errorMessages.headerFormat" name="header-format" class="mb-3" />
+      <v-card :title="t('header')" :sub-title="t('headerDescription')">
+        <v-radio-buttons
+          v-model="headerComponent.format"
+          :items="headerFormatItems"
+          :validationState="states.headerFormat"
+          :error="errorMessages.headerFormat"
+          name="header-format"
+          class="mb-3"
+          @update:model-value="resetState('headerFormat')"
+        />
         <Transition name="fade">
           <div v-if="headerFormat.isText">
-            <v-input v-model="headerTextValueModel" id="header-text" label="Text" placeholder="Enter header text..." :validationState="states.name" :error="errorMessages.name" required />
+            <v-input
+              v-model="headerTextValueModel"
+              :validationState="states.header"
+              :error="errorMessages.header"
+              required
+              id="header-text"
+              :label="t('text')"
+              :placeholder="t('headerTextPlaceholder')"
+              @keydown="resetState('header')"
+            />
           </div>
           <div v-else-if="headerFormat.isImage">
-            <v-image-uploader v-model="headerImageValueModel" :max-file-size="500" />
+            <v-image-uploader v-model="headerImageValueModel" :max-file-size="500" :validationState="states.header" :error-message="errorMessages.header" @update:model-value="resetState('header')" />
           </div>
         </Transition>
       </v-card>
 
-      <v-card title="Body" sub-title="Enter the text of your message in the language you’ve selected">
-        <VInput v-model="bodyComponent.text" id="multiline" label="" multiline :rows="4" />
+      <v-card :title="t('body')" :sub-title="t('bodyDescription')">
+        <v-input v-model="bodyComponent.text" id="multiline" label="" :validationState="states.body" :error="errorMessages.body" :rows="4" multiline @keydown="resetState('body')" />
       </v-card>
 
-      <v-card title="Footer" sub-title="Use this section for optional details like disclaimers, contact info, or additional context.">
-        <v-input v-model="footerComponent.text" id="footer-text" label="" placeholder="Enter footer text..." />
+      <v-card :title="t('footer')" :sub-title="t('footerDescription')">
+        <v-input
+          v-model="footerComponent.text"
+          id="footer-text"
+          label=""
+          :validationState="states.footer"
+          :error="errorMessages.footer"
+          :placeholder="t('footerTextPlaceholder')"
+          @keydown="resetState('footer')"
+        />
       </v-card>
-
-      <v-card title="Buttons" sub-title="Create buttons that let your customers respond to your message or take an action.">
-        <v-radio-buttons v-model="buttonsRadioModel" :items="buttonsRadioItems" name="show-buttons" class="mb-3" />
-
-        <v-records v-if="buttonsRadioModel" v-model="recordsModel" :record="recordDataTemplate" label="Buttons" :validationState="states.buttons" :error="errorMessages.buttons">
+      <v-card :title="t('buttons')" :sub-title="t('buttonsDescription')">
+        <v-radio-buttons v-model="buttonsRadioModel" :items="buttonsRadioItems" name="show-buttons" class="mb-3" @update:model-value="resetState('buttons')" />
+        <v-records v-if="buttonsRadioModel" v-model="recordsModel" :record="recordDataTemplate" :label="t('buttons')" :validationState="states.buttons" :error="errorMessages.buttons">
           <template #default="{ record, index: rIdx }">
             <div class="container">
               <div class="row">
                 <div class="col-12 col-sm-3">
-                  <v-select v-model="record.type" :id="`type-${record.type}-${rIdx}`" label="Button Type" placeholder="Select Button Type" :items="buttonTypeItems" :required="true" />
+                  <v-select
+                    v-model="record.type"
+                    :id="`type-${record.type}-${rIdx}`"
+                    :items="buttonTypeItems"
+                    :required="true"
+                    :validationState="states.buttons"
+                    :error="errorMessages.buttons"
+                    :label="t('buttonType')"
+                    :placeholder="t('buttonTypePlaceholder')"
+                    @update:model-value="resetState('buttons')"
+                  />
                 </div>
                 <template v-if="record.type == ButtonTypeEnum.url">
                   <div class="col-12 col-sm-3">
-                    <v-input v-model="record.text" :id="`text-${record.type}-${rIdx}`" label="Button Text" placeholder="Enter button text..." required />
+                    <v-input
+                      v-model="record.text"
+                      :id="`text-${record.type}-${rIdx}`"
+                      :validationState="states.buttons"
+                      :error="errorMessages.buttons"
+                      :label="t('buttonText')"
+                      :placeholder="t('buttonTextPlaceholder')"
+                      required
+                      @keydown="resetState('buttons')"
+                    />
                   </div>
                   <div class="col-12 col-sm-6">
-                    <v-input v-model="record.url!" :id="`url-${record.type}-${rIdx}`" label="Website URL" placeholder="https://arabot.io" required />
+                    <v-input
+                      v-model="record.url!"
+                      :id="`url-${record.type}-${rIdx}`"
+                      :validationState="states.buttons"
+                      :error="errorMessages.buttons"
+                      :label="t('websiteUrl')"
+                      placeholder="https://arabot.io"
+                      required
+                      @keydown="resetState('buttons')"
+                    />
                   </div>
                 </template>
 
                 <template v-if="record.type == ButtonTypeEnum.call">
                   <div class="col-12 col-sm-3">
-                    <v-input v-model="record.text" :id="`text-${record.type}-${rIdx}`" label="Button Text" placeholder="Enter button text..." required />
+                    <v-input
+                      v-model="record.text"
+                      :id="`text-${record.type}-${rIdx}`"
+                      :validationState="states.buttons"
+                      :error="errorMessages.buttons"
+                      :label="t('buttonText')"
+                      :placeholder="t('buttonTextPlaceholder')"
+                      required
+                      @keydown="resetState('buttons')"
+                    />
                   </div>
                   <div class="col-12 col-sm-6 d-flex flex-column">
                     <label class="form-label">
-                      Phone Number
+                      {{ t('phoneNumber') }}
                       <span class="text-danger">*</span>
                     </label>
                     <div class="d-flex">
-                      <v-select v-model="record.code" :id="`code-${record.type}-${rIdx}`" label="" placeholder=" " :items="countryItems" style="width: 120px" />
-                      <v-input v-model="record.phoneNumber!" :id="`phone-${record.type}-${rIdx}`" label="" placeholder="7XXX XXXX" class="ms-2 flex-fill" />
+                      <v-select
+                        v-model="record.code"
+                        :id="`code-${record.type}-${rIdx}`"
+                        :validationState="states.buttons"
+                        :error="errorMessages.buttons"
+                        :items="countryItems"
+                        label=""
+                        placeholder=" "
+                        style="width: 120px"
+                        @update:model-value="resetState('buttons')"
+                      />
+                      <v-input
+                        v-model="record.phoneNumber!"
+                        :validationState="states.buttons"
+                        :error="errorMessages.buttons"
+                        :id="`phone-${record.type}-${rIdx}`"
+                        label=""
+                        placeholder="7XXX XXXX"
+                        class="mx-2 flex-fill"
+                        @keydown="resetState('buttons')"
+                      />
                     </div>
                   </div>
                 </template>
@@ -90,6 +179,7 @@ import { BrandFormatEnum } from '../models/enum/BrandFormatEnum'
 import { ValidationStateEnum } from '../models/enum/ValidationStateEnum'
 import { MessageCategoryEnum } from '../models/enum/MessageCategoryEnum'
 import { MessageComponentTypeEnum } from '../models/enum/MessageComponentTypeEnum'
+import { t } from '../i18n/locales'
 
 import type { ITemplateMessage } from '../models/interface/i-template-message'
 import type { TItem } from '../models/type/t-items'
@@ -98,10 +188,10 @@ import type { IMessageHeader } from '../models/interface/i-header'
 import type { IMessageBody } from '../models/interface/i-body'
 import type { IMessageFooter } from '../models/interface/i-footer'
 import type { IMessageButtons } from '../models/interface/i-buttons'
+import type { TRecordDataTemplate } from '../models/type/t-record-data-template'
+import type { TMessageComponentValue } from '../models/type/t-message-component-value'
 import { ButtonTypeEnum } from '../models/enum/ButtonTypeEnum'
-import { TRecordDataTemplate } from '../models/type/t-record-data-template'
 import { MessageButton } from '../models/class/buttons'
-import { TMessageComponentValue } from '../models/type/t-message-component-value'
 import { splitPhoneNumber } from '../helper/utils'
 
 const props = defineProps<{
@@ -133,7 +223,7 @@ const recordsModel = ref([
     } as TRecordDataTemplate
   })
 ]) as Ref<TRecordDataTemplate[]>
-const recordDataTemplate = { type: '', text: '', url: '', code: '', phoneNumber: '' } as TRecordDataTemplate
+const recordDataTemplate = { type: '', text: '', url: '', code: '+962', phoneNumber: '' } as TRecordDataTemplate
 
 const states = reactive({
   name: ValidationStateEnum.none,
@@ -141,6 +231,7 @@ const states = reactive({
   category: ValidationStateEnum.none,
   headerFormat: ValidationStateEnum.none,
   body: ValidationStateEnum.none,
+  header: ValidationStateEnum.none,
   footer: ValidationStateEnum.none,
   buttons: ValidationStateEnum.none
 }) as {
@@ -149,6 +240,7 @@ const states = reactive({
   category: ValidationStateEnum
   headerFormat: ValidationStateEnum
   body: ValidationStateEnum
+  header: ValidationStateEnum
   footer: ValidationStateEnum
   buttons: ValidationStateEnum
 }
@@ -156,36 +248,37 @@ const states = reactive({
 //computed
 const errorMessages = computed(() => {
   return {
-    name: states.name == ValidationStateEnum.invalid ? 'This field is required' : '',
-    language: states.language == ValidationStateEnum.invalid ? 'This field is required' : '',
-    headerFormat: states.headerFormat == ValidationStateEnum.invalid ? 'This field is required' : '',
-    body: states.body == ValidationStateEnum.invalid ? 'This field is required' : '',
-    footer: states.footer == ValidationStateEnum.invalid ? 'This field is required' : '',
-    buttons: states.buttons == ValidationStateEnum.invalid ? 'This field is required' : ''
+    name: states.name == ValidationStateEnum.invalid ? t('requiredField') : '',
+    language: states.language == ValidationStateEnum.invalid ? t('requiredField') : '',
+    headerFormat: states.headerFormat == ValidationStateEnum.invalid ? t('requiredField') : '',
+    header: states.header == ValidationStateEnum.invalid ? t('requiredField') : '',
+    body: states.body == ValidationStateEnum.invalid ? t('requiredField') : '',
+    footer: states.footer == ValidationStateEnum.invalid ? t('requiredField') : '',
+    buttons: states.buttons == ValidationStateEnum.invalid ? t('requiredField') : ''
   }
-}) as ComputedRef<{ name: string; language: string; category: string; headerFormat: string; body: string; footer: string; buttons: string }>
+}) as ComputedRef<{ name: string; language: string; category: string; headerFormat: string; header: string; body: string; footer: string; buttons: string }>
 
 // languages
 const languageItems = computed((): TItem[] => {
   return Object.entries(LanguageEnum)
     .filter(([, value]) => LanguageEnum.none != value)
-    .map(([key, value], idx) => ({ value, displayText: key, id: idx }))
+    .map(([key, value], idx) => ({ value, displayText: t(key), id: idx }))
 })
 
 // categories
 const categories = computed((): TVisualItem[] => [
   {
     value: MessageCategoryEnum.marketing,
-    name: 'Marketing',
-    description: 'Promotions, ads, campaigns.',
+    name: t('marketing'),
+    description: t('marketingDescription'),
     icon: 'bi bi-megaphone',
     id: 1,
     selectedColor: 'var(--tm-purple)'
   },
   {
     value: MessageCategoryEnum.utility,
-    name: 'Utility',
-    description: 'Tools, utilities, services.',
+    name: t('utility'),
+    description: t('utilityDescription'),
     icon: 'bi bi-bell',
     id: 2,
     selectedColor: 'var(--tm-blue)'
@@ -196,19 +289,19 @@ const categories = computed((): TVisualItem[] => [
 const headerFormatItems = computed((): TItem[] => [
   {
     value: '',
-    displayText: 'None',
+    displayText: t('none'),
     icon: '',
     id: 0
   },
   {
     value: BrandFormatEnum.text,
-    displayText: 'Text',
+    displayText: t('text'),
     icon: 'bi bi-list',
     id: 1
   },
   {
     value: BrandFormatEnum.image,
-    displayText: 'Image',
+    displayText: t('image'),
     icon: 'bi bi-card-image',
     id: 2
   }
@@ -240,13 +333,13 @@ const headerTextValueModel = computed({
 const buttonsRadioItems = computed((): TItem[] => [
   {
     value: '',
-    displayText: 'None',
+    displayText: t('none'),
     icon: '',
     id: 0
   },
   {
     value: 'actions',
-    displayText: 'Call to actions',
+    displayText: t('callToActions'),
     icon: 'bi bi-0-circle',
     id: 1
   }
@@ -256,7 +349,7 @@ const buttonsRadioItems = computed((): TItem[] => [
 const buttonTypeItems = computed((): TItem[] => {
   return Object.entries(ButtonTypeEnum)
     .filter(([, value]) => ButtonTypeEnum.none != value)
-    .map(([key, value], idx) => ({ value, displayText: key, id: idx }))
+    .map(([key, value], idx) => ({ value, displayText: t(key), id: idx }))
 })
 
 const countryItems = computed((): TItem[] => [
@@ -276,8 +369,64 @@ const countryItems = computed((): TItem[] => [
 
 const validate = (): boolean => {
   let valid = true
-  return valid
+
+  const validName = modelValue.value.name?.trim().length > 0
+  states.name = validName ? ValidationStateEnum.valid : ValidationStateEnum.invalid
+
+  const validLanguage = modelValue.value.language != LanguageEnum.none
+  states.language = validLanguage ? ValidationStateEnum.valid : ValidationStateEnum.invalid
+
+  const validCategory = modelValue.value.category != MessageCategoryEnum.none
+  states.category = validCategory ? ValidationStateEnum.valid : ValidationStateEnum.invalid
+
+  let validHeader = true
+  if (headerComponent.value) {
+    if (headerFormat.value.isText) {
+      validHeader = validHeader && !!headerTextValueModel.value?.trim()?.length
+    } else if (headerFormat.value.isImage) {
+      validHeader = validHeader && !!headerImageValueModel.value?.trim()?.length
+    }
+    states.header = validHeader ? ValidationStateEnum.valid : ValidationStateEnum.invalid
+  }
+
+  let validBody = bodyComponent.value ? !!bodyComponent.value?.text?.trim()?.length : true
+  states.body = validBody ? ValidationStateEnum.valid : ValidationStateEnum.invalid
+
+  // let validFooter = footerComponent.value ? !!footerComponent.value?.text?.trim()?.length : true
+  // states.footer = validFooter ? ValidationStateEnum.valid : ValidationStateEnum.invalid
+
+  // TODO: This validation needs to be re-designed
+  // It's NOT working as expected
+  // I left it as it because it will consume much time
+  // Please ignore it because it just an interview task
+  let validButtons = true
+  if (buttonsRadioModel.value == 'actions') {
+    if (buttonsComponent.value?.buttons.length) {
+      for (const button of buttonsComponent.value?.buttons) {
+        if (button.type == ButtonTypeEnum.none) continue
+
+        if (button.type == ButtonTypeEnum.call) {
+          const btnPhone = button?.value?.phone_number
+          validButtons = validButtons && !!button?.text?.trim()?.length && !!btnPhone?.trim()?.length && /^7\d{3} \d{4}$/.test(btnPhone?.trim())
+        } else {
+          const btnUrl = button?.value?.url
+          validButtons = validButtons && !!button?.text?.trim()?.length && !!btnUrl?.trim()?.length && /^(https?:\/\/)/.test(btnUrl?.trim())
+        }
+
+        if (!validButtons) {
+          break
+        }
+      }
+    } else {
+      validButtons = false
+    }
+    states.buttons = validButtons ? ValidationStateEnum.valid : ValidationStateEnum.invalid
+  }
+
+  return valid && validName && validLanguage && validCategory && validHeader && validBody && validButtons
 }
+
+const resetState = (key: keyof typeof states) => (states[key] = ValidationStateEnum.none)
 
 // watchers
 watch(

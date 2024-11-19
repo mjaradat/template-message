@@ -10,9 +10,12 @@
     <input ref="fileInput" class="form-control d-none" type="file" accept="image/*" @change="onFileChange" />
     <div v-if="!modelValue" class="d-flex flex-column upload-instructions text-muted" style="cursor: pointer">
       <i class="bi bi-cloud-upload fs-1"></i>
-      <h6>Drag and drop an image here, or</h6>
-      <small class="text-muted mb-3">Allowed types .jpeg, .jpg, .png</small>
-      <button type="button" class="btn btn-outline-primary m-auto" @click="triggerFileInput">Select File</button>
+
+      <h6>
+        {{ t('dragDrop') }}
+      </h6>
+      <small class="text-muted mb-3">{{ t('allowedTypes') }} .jpeg, .jpg, .png</small>
+      <button type="button" class="btn btn-outline-primary m-auto" @click="triggerFileInput">{{ t('selectFile') }}</button>
     </div>
 
     <div v-if="validationMessage || errorMessage" class="text-danger mt-2">
@@ -27,6 +30,7 @@
 
 <script lang="ts" setup>
 import { ref, defineProps, defineEmits, toRefs } from 'vue'
+import { t } from '../i18n/locales'
 
 const props = defineProps({
   modelValue: {
@@ -90,11 +94,11 @@ const handleFile = (file: File | undefined) => {
 
 const validateFile = (file: File) => {
   if (file.size > maxFileSize.value * 1024) {
-    validationMessage.value = `File size exceeds ${maxFileSize.value} KB.`
+    validationMessage.value = t('fileSize', { key: maxFileSize.value })
     return false
   }
   if (!file.type.startsWith('image/')) {
-    validationMessage.value = `Only image files are allowed.`
+    validationMessage.value = t('onlyImage')
     return false
   }
   validationMessage.value = null
