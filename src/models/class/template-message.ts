@@ -10,11 +10,11 @@ class TemplateMessage {
   name!: string
   category!: MessageCategoryEnum
   components!: IMessageComponent[]
-  constructor({ language = LanguageEnum.en, name = '', category = MessageCategoryEnum.marketing, components = [] } = {} as ITemplateMessage) {
+  constructor({ language = LanguageEnum.none, name = '', category = MessageCategoryEnum.none, components = [] } = {} as ITemplateMessage) {
     this.language = language
     this.name = name
     this.category = category
-    this.components = components ? components.map(model => MessageComponentFactory.createComponent(model)) : []
+    this.components = components?.map(model => MessageComponentFactory.createComponent(model))
   }
 }
 

@@ -1,8 +1,8 @@
 <template>
-  <div class="form-actions radio-buttons d-inline-flex align-items-center flex-wrap rounded p-1">
-    <div v-for="item in items" :key="item.id" class="form-actions-justified mx-1" :class="{ 'bg-white': modelValue == item.value, validationClass }">
-      <input v-model="modelValue" type="radio" class="btn-check" :id="`${item.id}`" :value="item.value" :name="name" :disabled="disabled" />
-      <label class="d-flex align-items-center btn btn-sm border-0" :for="`${item.id}`">
+  <div class="form-actions tm-blue d-inline-flex align-items-center flex-wrap rounded p-1">
+    <div v-for="item in items" :key="`${name}-${item.id}`" class="form-actions-justified mx-1" :class="{ 'bg-white': modelValue == item.value, validationClass }">
+      <input v-model="modelValue" type="radio" class="btn-check" :id="`${name}-${item.id}`" :value="item.value" :name="name" :disabled="disabled" />
+      <label class="d-flex align-items-center btn btn-sm border-0" :for="`${name}-${item.id}`">
         <i v-if="item.icon" class="fs-6" :class="item.icon"></i>
         <span class="px-2">
           {{ item.displayText }}
@@ -19,15 +19,15 @@
 <script setup lang="ts">
 import { defineProps, defineEmits, ref, computed, watch, toRefs } from 'vue'
 import { ValidationStateEnum } from '../models/enum/ValidationStateEnum'
+import { TItem } from '../models/type/t-items'
 
 // Props
 const props = defineProps<{
-  items: { value: string; displayText: string; icon: string; id: number }[] // Array of items for radio buttons
-  validationState?: ValidationStateEnum // Validation state (valid, invalid, or none)
-  name: string // Name for the radio buttons (for grouping)
-  error?: string // Error message for invalid state
-  successMessage?: string // Success message for valid state
-  disabled?: boolean // If true, disables the radio buttons
+  items: TItem[]
+  validationState?: ValidationStateEnum
+  name: string
+  error?: string
+  disabled?: boolean
 }>()
 
 // Two-way binding (v-model equivalent)

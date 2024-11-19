@@ -76,7 +76,6 @@ watch(selectedCategory, newValue => {
 .category-selection {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
 }
 
 .category-item {
@@ -90,20 +89,20 @@ watch(selectedCategory, newValue => {
 }
 
 .category-item:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .category-item.selected {
-  border-color: #000;
+  border-color: var(--bs-black);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .category-item.is-valid {
-  border-color: #28a745;
+  border-color: var(--bs-success);
 }
 
 .category-item.is-invalid {
-  border-color: #dc3545;
+  border-color: var(--bs-danger);
 }
 
 .category-icon {
@@ -129,13 +128,5 @@ watch(selectedCategory, newValue => {
 
 .category-text small {
   color: #888;
-}
-
-.invalid-feedback {
-  color: #dc3545;
-}
-
-.valid-feedback {
-  color: #28a745;
 }
 </style>

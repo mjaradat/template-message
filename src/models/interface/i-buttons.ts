@@ -5,7 +5,7 @@ import type { IMessageComponent } from './i-message-component'
 interface IMessageButton {
   type: ButtonTypeEnum
   text: string
-  value: TMessageComponentValue | undefined
+  value: TMessageComponentValue
 }
 
 interface IMessageButtons extends IMessageComponent {

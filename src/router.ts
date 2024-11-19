@@ -1,15 +1,31 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import CreateLayout from './layouts/CreateLayout.vue'
+import VRouterView from './components/VRouterView.vue'
+
 import Input from './docs/input.vue' // Example component, adjust as needed
 import Layout from './layouts/Layout.vue'
 import Select from './docs/select.vue'
 import VisualSelect from './docs/visual-select.vue'
 import RadioButtons from './docs/radio-buttons.vue'
 import Preview from './docs/preview.vue'
+import Records from './docs/records.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'home',
+    name: 'template',
+    component: VRouterView,
+    children: [
+      {
+        path: '', // default route
+        name: 'new-template-message',
+        component: CreateLayout
+      }
+    ]
+  },
+  {
+    path: '/docs',
+    name: 'docs',
     component: Layout,
     children: [
       {
@@ -36,6 +52,11 @@ const routes = [
         path: '/preview',
         name: 'preview',
         component: Preview
+      },
+      {
+        path: '/buttons',
+        name: 'buttons',
+        component: Records
       }
     ]
   }

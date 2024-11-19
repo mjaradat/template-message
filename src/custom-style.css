@@ -1,3 +1,24 @@
+/* global */
+:root {
+  --tm-purple: #e4e5ef;
+  --tm-blue: #edf2f7;
+  --tm-base: #f8f9fa;
+}
+
+body {
+  background-color: var(--tm-base);
+}
+
+.tm-purple {
+  background-color: var(--tm-purple) !important;
+}
+
+.tm-blue {
+  background-color: var(--tm-blue) !important;
+}
+
+/* ./global */
+
 /* Used for the radio buttons component */
 .radio-buttons {
   background-color: #edf2f7;
@@ -230,11 +251,4 @@
   justify-content: center;
   font-size: 14px;
   color: #666;
-}
-
-/* Container styling */
-.cta-container {
-  display: flex;
-  gap: 10px; /* Space between buttons */
-  margin-top: 15px; /* Space above the CTAs */
 }

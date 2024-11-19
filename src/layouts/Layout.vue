@@ -24,6 +24,9 @@
             <li class="nav-item">
               <router-link to="/preview" class="nav-link">Preview</router-link>
             </li>
+            <li class="nav-item">
+              <router-link to="/buttons" class="nav-link">buttons</router-link>
+            </li>
           </ul>
         </nav>
       </div>

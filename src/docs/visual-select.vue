@@ -25,7 +25,7 @@ const categories = [
     description: 'Promotions, ads, campaigns.',
     icon: 'bi bi-megaphone',
     id: 1,
-    selectedColor: '#E4E5EF'
+    selectedColor: 'var(--tm-purple)'
   },
   {
     value: MessageCategoryEnum.utility,
@@ -33,7 +33,7 @@ const categories = [
     description: 'Tools, utilities, services.',
     icon: 'bi bi-bell',
     id: 2,
-    selectedColor: '#EDF2F7'
+    selectedColor: 'var(--tm-blue)'
   }
 ]
 

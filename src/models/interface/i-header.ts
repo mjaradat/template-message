@@ -4,7 +4,8 @@ import type { IMessageComponent } from './i-message-component'
 
 interface IMessageHeader extends IMessageComponent {
   format: BrandFormatEnum
-  value: TMessageComponentValue | undefined
+  value: TMessageComponentValue
+  resetValue(key: keyof TMessageComponentValue): void
 }
 
 export type { IMessageHeader }
