@@ -26,7 +26,9 @@
           <div v-if="headerFormat.isText">
             <v-input v-model="headerTextValueModel" id="header-text" label="Text" placeholder="Enter header text..." :validationState="states.name" :error="errorMessages.name" required />
           </div>
-          <div v-else-if="headerFormat.isImage"></div>
+          <div v-else-if="headerFormat.isImage">
+            <v-image-uploader v-model="headerImageValueModel" :max-file-size="500" />
+          </div>
         </Transition>
       </v-card>
 
@@ -217,6 +219,15 @@ const headerFormat = computed(() => ({
   isImage: headerComponent.value.format == BrandFormatEnum.image
 }))
 
+const headerImageValueModel = computed({
+  get(): string {
+    return headerComponent.value.value.url || ''
+  },
+  set(newValue: string): void {
+    headerComponent.value.value.url = newValue
+  }
+})
+
 const headerTextValueModel = computed({
   get(): string {
     return headerComponent.value.value.text || ''
@@ -301,4 +312,5 @@ const VSelect = defineAsyncComponent(() => import('../components/VSelect.vue'))
 const VVisualSelect = defineAsyncComponent(() => import('../components/VVisualSelect.vue'))
 const VRecords = defineAsyncComponent(() => import('../components/VRecords.vue'))
 const VCard = defineAsyncComponent(() => import('../components/VCard.vue'))
+const VImageUploader = defineAsyncComponent(() => import('../components/VImageUploader.vue'))
 </script>

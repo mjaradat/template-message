@@ -27,6 +27,9 @@
             <li class="nav-item">
               <router-link to="/buttons" class="nav-link">buttons</router-link>
             </li>
+            <li class="nav-item">
+              <router-link to="/image" class="nav-link">Image</router-link>
+            </li>
           </ul>
         </nav>
       </div>

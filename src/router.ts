@@ -9,6 +9,7 @@ import VisualSelect from './docs/visual-select.vue'
 import RadioButtons from './docs/radio-buttons.vue'
 import Preview from './docs/preview.vue'
 import Records from './docs/records.vue'
+import ImageU from './docs/image.vue'
 
 const routes = [
   {
@@ -57,6 +58,11 @@ const routes = [
         path: '/buttons',
         name: 'buttons',
         component: Records
+      },
+      {
+        path: '/image',
+        name: 'image',
+        component: ImageU
       }
     ]
   }
