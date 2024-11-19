@@ -15,6 +15,10 @@ class MessageButton implements IMessageButton {
     this.text = text
     this.value = { ...value }
   }
+
+  resetValue(key: keyof TMessageComponentValue): void {
+    if (this.value[key] || this.value[key] === '') this.value = {}
+  }
 }
 
 // buttons component class

@@ -252,3 +252,15 @@ body {
   font-size: 14px;
   color: #666;
 }
+
+/* RTL */
+[dir='rtl'] .message {
+  border-radius: 5px 0px 5px 5px;
+}
+
+[dir='rtl'] .message:after {
+  border-width: 0px 0 10px 10px;
+  border-color: transparent transparent transparent #fff;
+  top: 0;
+  right: -10px;
+}

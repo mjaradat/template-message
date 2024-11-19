@@ -1,6 +1,6 @@
 <template>
   <div class="mb-3">
-    <label :for="id" class="form-label">
+    <label v-if="label" :for="id" class="form-label">
       {{ label }}
       <span v-if="required" class="text-danger">*</span>
     </label>

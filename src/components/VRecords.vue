@@ -32,12 +32,11 @@
 <script setup lang="ts">
 import { ref, toRefs, watch } from 'vue'
 import { ValidationStateEnum } from '../models/enum/ValidationStateEnum'
-import { IMessageButton } from '../models/interface/i-buttons'
-import { MessageButton } from '../models/class/buttons'
 
 // Props
 const props = defineProps<{
-  modelValue: IMessageButton[]
+  modelValue: any[]
+  record: { [key: string]: string }
   label?: string
   validationState?: ValidationStateEnum
   error?: string
@@ -45,13 +44,13 @@ const props = defineProps<{
 
 // Emits
 const emits = defineEmits<{
-  (e: 'update:modelValue', value: IMessageButton[]): void
+  (e: 'update:modelValue', value: any[]): void
 }>()
 
-const { modelValue } = toRefs(props)
+const { modelValue, record } = toRefs(props)
 // Internal State
 const records = ref([...modelValue.value]) // Local copy of the records
-const newRecord = ref(new MessageButton())
+const newRecord = ref({ ...record.value })
 
 watch(
   () => modelValue.value,
@@ -64,7 +63,7 @@ watch(
 const addRecord = () => {
   if (!newRecord.value) return
   records.value.push(newRecord.value)
-  newRecord.value = new MessageButton()
+  newRecord.value = { ...record.value }
   emits('update:modelValue', records.value)
 }
 

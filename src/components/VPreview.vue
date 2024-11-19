@@ -8,7 +8,7 @@
           <div class="content-icon text-white">
             <i class="bi bi-shop fs-6"></i>
           </div>
-          <hr class="text-white ms-3" />
+          <hr class="text-white mx-3" />
         </div>
       </div>
       <div class="preview-body">
@@ -39,9 +39,9 @@
               </div>
               <div class="buttons border-top px-2">
                 <div class="d-flex flex-column justify-content-center text-bolder">
-                  <a href="#" class="text-decoration-none text-primary d-flex align-items-center justify-content-center py-2"> <i class="bi bi-telephone-fill"></i> <span class="ms-2">Call</span> </a>
+                  <a href="#" class="text-decoration-none text-primary d-flex align-items-center justify-content-center py-2"> <i class="bi bi-telephone-fill"></i> <span class="mx-2">Call</span> </a>
                   <a href="#" class="text-decoration-none text-primary d-flex align-items-center justify-content-center py-2 border-top">
-                    <i class="bi bi-box-arrow-up-right"></i> <span class="ms-2">Visit</span>
+                    <i class="bi bi-box-arrow-up-right"></i> <span class="mx-2">Visit</span>
                   </a>
                 </div>
               </div>
